@@ -34,9 +34,9 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 	GameObject playerObject;
 
 	World world;
-    Box2DDebugRenderer debugRenderer;
+	Box2DDebugRenderer debugRenderer;
 
-	public void makeGround() {
+	public void makeGround () {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(0, 0);
 		bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -55,7 +55,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		body.setUserData(object);
 	}
 
-	public void makeWall() {
+	public void makeWall () {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(0, 5000);
 		bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -74,7 +74,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		body.setUserData(object);
 	}
 
-	public Body makeBlock(BodyDef.BodyType bodyType, float x, float y, float w, float h) {
+	public Body makeBlock (BodyDef.BodyType bodyType, float x, float y, float w, float h) {
 		PolygonShape shape = ShapeBuilder.buildAsBox(w, h);
 		FixtureDef fixtureDef = FixtureDefBuilder.build(shape, false, 0.1f, 0, 0.3f);
 		BodyBuilder bodyBuilder = new BodyBuilder();
@@ -84,16 +84,17 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		return bodyBuilder.build(world);
 	}
 
-	public Body makeIncline(float x, float y, float w, float h, int rotation) {
-        PolygonShape shape = ShapeBuilder.buildIncline(w, h, rotation);
-        FixtureDef fixtureDef = FixtureDefBuilder.build(shape, false, 0.1f, 0, 0.3f);
-        BodyBuilder bodyBuilder = new BodyBuilder();
-        bodyBuilder.setPosition(x, y)
-                .setBodyType(BodyDef.BodyType.StaticBody)
-                .addFixtureDef(fixtureDef);
-        return bodyBuilder.build(world);
-    }
-	public Body buildPlayerBody(float x, float y) {
+	public Body makeIncline (float x, float y, float w, float h, int rotation) {
+		PolygonShape shape = ShapeBuilder.buildIncline(w, h, rotation);
+		FixtureDef fixtureDef = FixtureDefBuilder.build(shape, false, 0.1f, 0, 0.3f);
+		BodyBuilder bodyBuilder = new BodyBuilder();
+		bodyBuilder.setPosition(x, y)
+				.setBodyType(BodyDef.BodyType.StaticBody)
+				.addFixtureDef(fixtureDef);
+		return bodyBuilder.build(world);
+	}
+
+	public Body buildPlayerBody (float x, float y) {
 		PolygonShape shape1 = ShapeBuilder.buildAsBox(4f, 4f);
 		FixtureDef fixtureDef1 = FixtureDefBuilder.build(shape1, false, 0.1f, 0, 0);
 		PolygonShape shape2 = ShapeBuilder.buildAsBox(1f, 0.5f, new Vector2(0, -2.0f));
@@ -102,54 +103,54 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		BodyBuilder bodyBuilder = new BodyBuilder();
 		bodyBuilder.setPosition(x, y)
 				.setBodyType(BodyDef.BodyType.DynamicBody)
-                .setLinearDamping(0.5f)
-                .setFixedRotation(true)
+				.setLinearDamping(0.5f)
+				.setFixedRotation(true)
 				.addFixtureDef(fixtureDef1)
 				.addFixtureDef(fixtureDef2);
 		return bodyBuilder.build(world);
 	}
 
-	public GameObject buildPlayer(float x, float y)
-    {
-        Body body = buildPlayerBody(x, y);
-        GameObject object = new GameObject();
-        object.addComponent(new TextureComponent(img));
-        TransformComponent transformComponent = new TransformComponent();
-        transformComponent.size.set(4, 4);
-        object.addComponent(transformComponent);
-        object.addComponent(new ColorComponent(Color.RED));
-        object.addComponent(new BodyComponent(body));
-        object.addComponent(new PlayerComponent());
-        ParticleComponent particleComponent = new ParticleComponent(ParticleManager.getPool("jump"));
-        particleComponent.enabled = false;
-        object.addComponent(particleComponent);
-        body.setUserData(object);
-        return object;
-    }
+	public GameObject buildPlayer (float x, float y) {
+		Body body = buildPlayerBody(x, y);
+		GameObject object = new GameObject();
+		object.addComponent(new TextureComponent(img));
+		TransformComponent transformComponent = new TransformComponent();
+		transformComponent.size.set(4, 4);
+		object.addComponent(transformComponent);
+		object.addComponent(new ColorComponent(Color.RED));
+		object.addComponent(new BodyComponent(body));
+		object.addComponent(new PlayerComponent());
+		ParticleComponent particleComponent = new ParticleComponent(ParticleManager.getPool("jump"));
+		particleComponent.enabled = false;
+		object.addComponent(particleComponent);
+		body.setUserData(object);
+		return object;
+	}
 
-    public GameObject buildBullet(Vector2 position, Vector2 target, float lifetime) {
-        CircleShape shape = ShapeBuilder.buildCircle(2f);
-        FixtureDef fixtureDef = FixtureDefBuilder.build(shape, true, 0.1f, 0, 0.3f);
-        BodyBuilder bodyBuilder = new BodyBuilder();
-        bodyBuilder.setPosition(position)
-                .setBodyType(BodyDef.BodyType.KinematicBody)
-                .addFixtureDef(fixtureDef);
-        Body body = bodyBuilder.build(world);
-        GameObject gameObject = new GameObject();
-        gameObject.addComponent(new TextureComponent(img3));
-        TransformComponent transformComponent = new TransformComponent();
-        transformComponent.position.add(0, 0, 1);
-        transformComponent.size.set(4, 4);
-        gameObject.addComponent(transformComponent);
-        gameObject.addComponent(new ColorComponent(Color.ORANGE));
-        gameObject.addComponent(new BodyComponent(body));
-        gameObject.addComponent(new BulletComponent(target, MathUtils.random(0.5f, 1.0f), lifetime));
-        gameObject.addComponent(new DamageComponent());
-        gameObject.addComponent(new ParticleComponent(ParticleManager.getPool("bullet")));
-        body.setUserData(gameObject);
-        return gameObject;
-    }
-	public GameObject buildTestItem(float x, float y) {
+	public GameObject buildBullet (Vector2 position, Vector2 target, float lifetime) {
+		CircleShape shape = ShapeBuilder.buildCircle(2f);
+		FixtureDef fixtureDef = FixtureDefBuilder.build(shape, true, 0.1f, 0, 0.3f);
+		BodyBuilder bodyBuilder = new BodyBuilder();
+		bodyBuilder.setPosition(position)
+				.setBodyType(BodyDef.BodyType.KinematicBody)
+				.addFixtureDef(fixtureDef);
+		Body body = bodyBuilder.build(world);
+		GameObject gameObject = new GameObject();
+		gameObject.addComponent(new TextureComponent(img3));
+		TransformComponent transformComponent = new TransformComponent();
+		transformComponent.position.add(0, 0, 1);
+		transformComponent.size.set(4, 4);
+		gameObject.addComponent(transformComponent);
+		gameObject.addComponent(new ColorComponent(Color.ORANGE));
+		gameObject.addComponent(new BodyComponent(body));
+		gameObject.addComponent(new BulletComponent(target, MathUtils.random(0.5f, 1.0f), lifetime));
+		gameObject.addComponent(new DamageComponent());
+		gameObject.addComponent(new ParticleComponent(ParticleManager.getPool("bullet")));
+		body.setUserData(gameObject);
+		return gameObject;
+	}
+
+	public GameObject buildTestItem (float x, float y) {
 		CircleShape shape = ShapeBuilder.buildCircle(2f);
 		FixtureDef fixtureDef = FixtureDefBuilder.build(shape, true, 0.1f, 0, 0.3f);
 		BodyBuilder bodyBuilder = new BodyBuilder();
@@ -169,18 +170,19 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		return gameObject;
 	}
 
-	public Color randomColor() {
+	public Color randomColor () {
 		return new Color(
-		        MathUtils.random(0.3f, 1.0f),
-                MathUtils.random(0.3f, 1.0f),
-                MathUtils.random(0.3f, 1.0f),
-                1.0f);
+				MathUtils.random(0.3f, 1.0f),
+				MathUtils.random(0.3f, 1.0f),
+				MathUtils.random(0.3f, 1.0f),
+				1.0f);
 	}
+
 	@Override
 	public void create () {
 		Gdx.input.setInputProcessor(this);
 		world = new World(new Vector2(0, -9.8f * 5), false);
-        world.setContactListener(new ContactManager());
+		world.setContactListener(new ContactManager());
 		debugRenderer = new Box2DDebugRenderer();
 
 		CameraManager.init(8f);
@@ -205,32 +207,33 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 		PlayerController.setPlayerObject(playerObject);
 		ObjectManager.register(playerObject);
 
-		for (int x=0; x<20; x++) {
-            for (int y=0; y<100; y++) {
+		for (int x = 0; x < 20; x++) {
+			for (int y = 0; y < 100; y++) {
 
-                float s = 8;
-                float px = x * (s * 4) + 50;
-                float py = y * (s * 2) + 30;
-                Body body = makeBlock(BodyDef.BodyType.KinematicBody,
-                        px, py, s * 2, s);
-                GameObject object = new GameObject();
-                object.addComponent(new TextureComponent(img));
-                object.addComponent(new ColorComponent(randomColor()));
-                object.addComponent(new BodyComponent(body));
-                TransformComponent transformComponent = new TransformComponent();
-                transformComponent.position.add(0, 0, 2);
-                transformComponent.size.set(s * 2, s);
-                object.addComponent(transformComponent);
-                body.setUserData(object);
-                ObjectManager.register(object);
+				float s = 8;
+				float px = x * (s * 4) + 50;
+				float py = y * (s * 2) + 30;
+				Body body = makeBlock(BodyDef.BodyType.KinematicBody,
+						px, py, s * 2, s);
+				GameObject object = new GameObject();
+				object.addComponent(new TextureComponent(img));
+				object.addComponent(new ColorComponent(randomColor()));
+				object.addComponent(new BodyComponent(body));
+				TransformComponent transformComponent = new TransformComponent();
+				transformComponent.position.add(0, 0, 2);
+				transformComponent.size.set(s * 2, s);
+				object.addComponent(transformComponent);
+				body.setUserData(object);
+				ObjectManager.register(object);
 
-            }
-        }
+			}
+		}
 	}
 
 	private static final Vector2 jumpImpulse = new Vector2(0, 100f);
 
 	private float secTime = 0;
+
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -244,12 +247,14 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 			ObjectManager.register(
 					buildBullet(new Vector2(position).add(MathUtils.random(-200, 200), MathUtils.random(-200, 200)), position, MathUtils.random(7.0f, 10.0f)));
 
-		} else { secTime += Gdx.graphics.getDeltaTime(); }
+		} else {
+			secTime += Gdx.graphics.getDeltaTime();
+		}
 		fpsLogger.log();
 
-        ObjectManager.updateBeRemoved();
+		ObjectManager.updateBeRemoved();
 		CameraManager.updateAutomatic();
-        PlayerController.update();
+		PlayerController.update();
 
 		for (GameObject object : ObjectManager.getList()) {
 			UpdateController.update(object);
@@ -257,13 +262,13 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 				RenderController.addObject(object);
 			}
 		}
-        batch.begin();
+		batch.begin();
 		batch.setProjectionMatrix(CameraManager.getCombined());
 		RenderController.render(batch);
 		batch.end();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -286,6 +291,7 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 	}
 
 	private static final Vector2 impulseVec = new Vector2(0, 100);
+
 	@Override
 	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
 		for (GameObject object : ObjectManager.getList()) {
@@ -316,10 +322,10 @@ public class GameMain extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean scrolled (int amount) {
 		if (amount > 0) {
-		    CameraManager.zoomOut();;
-        } else {
-		    CameraManager.zoomIn();;
-        }
-        return false;
+			CameraManager.zoomOut();
+		} else {
+			CameraManager.zoomIn();
+		}
+		return false;
 	}
 }
